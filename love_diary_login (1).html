@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Diary Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6f0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatUp linear infinite;
+      opacity: 0.7;
+      top: 100vh;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -15px;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: -15px;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    .heart:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 0s; }
+    .heart:nth-child(2) { left: 30%; animation-duration: 10s; animation-delay: 2s; }
+    .heart:nth-child(3) { left: 50%; animation-duration: 7s; animation-delay: 4s; }
+    .heart:nth-child(4) { left: 70%; animation-duration: 9s; animation-delay: 1s; }
+    .heart:nth-child(5) { left: 85%; animation-duration: 11s; animation-delay: 3s; }
+
+    .menu-btn {
+      background: #f87171;
+      color: white;
+      padding: 1rem 2rem;
+      margin: 0.5rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      box-shadow: 0 0 10px #f87171;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .menu-btn:hover {
+      background: #ef4444;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Hearts -->
+  <div class="heart"></div>
+  <div class="heart"></div>
+  <div class="heart"></div>
+  <div class="heart"></div>
+  <div class="heart"></div>
+
+  <!-- Login Page -->
+  <div id="loginPage" class="flex flex-col items-center justify-center min-h-screen z-10 relative">
+    <div class="bg-pink-100 p-8 rounded-3xl shadow-lg w-80 text-center">
+      <h2 class="text-2xl font-bold text-pink-600 mb-4">💕 Welcome My Love 💕</h2>
+      <form id="loginForm">
+        <input id="username" type="text" placeholder="Username Only" class="mb-4 w-full px-4 py-2 rounded-full border border-pink-300 focus:outline-none" required />
+        <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 font-bold">Login</button>
+        <p id="errorMsg" class="text-red-600 text-sm mt-2"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Menu Page -->
+  <div id="menuPage" class="hidden text-center p-6 z-10 relative">
+    <h1 class="text-3xl font-bold text-pink-700 mb-2">❤️ My Love's Diary ❤️</h1>
+    <p class="text-pink-600 italic mb-4">Let's make beautiful memories together.</p>
+    <button class="menu-btn" id="btnDateReminder">📅 Date Reminder</button>
+    <button class="menu-btn" onclick="alert('Live Location coming soon!')">📍 Live Location</button>
+    <button class="menu-btn" onclick="alert('Photo Gallery coming soon!')">🖼️ Photo Gallery</button>
+    <button class="menu-btn" id="btnLoveNotes">💌 Love Notes</button>
+    <button class="menu-btn" onclick="alert('Love Songs Player coming soon!')">🎵 Love Songs</button>
+  </div>
+
+  <!-- Date Reminder Page -->
+  <div id="dateReminderPage" class="hidden p-6 max-w-md mx-auto bg-pink-50 rounded-3xl shadow-lg z-10 relative">
+    <h2 class="text-2xl font-bold text-pink-700 mb-4">📅 Date Reminder</h2>
+
+    <form id="dateForm" class="mb-4">
+      <input type="text" id="dateName" placeholder="Event Name (e.g. Anniversary)" 
+             class="w-full mb-2 px-4 py-2 rounded-full border border-pink-300 focus:outline-none" required />
+      <input type="date" id="dateValue" class="w-full mb-4 px-4 py-2 rounded-full border border-pink-300 focus:outline-none" required />
+      <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 font-bold">Add Date</button>
+    </form>
+
+    <ul id="dateList" class="text-pink-600 font-semibold space-y-2 max-h-64 overflow-y-auto">
+      <!-- Dates will be listed here -->
+    </ul>
+
+    <button onclick="backToMenu()" class="mt-6 bg-pink-300 hover:bg-pink-400 text-pink-900 py-2 px-6 rounded-full font-semibold shadow-md">Back to Menu</button>
+  </div>
+
+  <!-- Love Notes Page -->
+  <div id="loveNotesPage" class="hidden p-6 max-w-md mx-auto bg-pink-50 rounded-3xl shadow-lg z-10 relative">
+    <h2 class="text-2xl font-bold text-pink-700 mb-4">💌 Love Notes</h2>
+
+    <form id="noteForm" class="mb-4">
+      <!-- Removed note title input -->
+      <textarea id="noteContent" rows="4" placeholder="Write your love note here..." 
+                class="w-full mb-4 px-4 py-2 rounded-xl border border-pink-300 focus:outline-none resize-none" required></textarea>
+      <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-full hover:bg-pink-600 font-bold">Add Note</button>
+    </form>
+
+    <ul id="noteList" class="text-pink-600 font-semibold space-y-2 max-h-64 overflow-y-auto">
+      <!-- Notes will be listed here -->
+    </ul>
+
+    <button onclick="backToMenuFromNotes()" class="mt-6 bg-pink-300 hover:bg-pink-400 text-pink-900 py-2 px-6 rounded-full font-semibold shadow-md">Back to Menu</button>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginPage = document.getElementById("loginPage");
+    const menuPage = document.getElementById("menuPage");
+
+    const btnDateReminder = document.getElementById("btnDateReminder");
+    const dateReminderPage = document.getElementById("dateReminderPage");
+    const dateForm = document.getElementById("dateForm");
+    const dateNameInput = document.getElementById("dateName");
+    const dateValueInput = document.getElementById("dateValue");
+    const dateList = document.getElementById("dateList");
+
+    const btnLoveNotes = document.getElementById("btnLoveNotes");
+    const loveNotesPage = document.getElementById("loveNotesPage");
+    const noteForm = document.getElementById("noteForm");
+    const noteContentInput = document.getElementById("noteContent");
+    const noteList = document.getElementById("noteList");
+
+    // Login form submit
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = usernameInput.value.trim();
+      if (username === "NZH+LY") {
+        loginPage.classList.add("hidden");
+        menuPage.classList.remove("hidden");
+        errorMsg.textContent = "";
+      } else {
+        errorMsg.textContent = "Wrong username!";
+      }
+    });
+
+    // Show Date Reminder page when button clicked
+    btnDateReminder.addEventListener("click", function() {
+      menuPage.classList.add("hidden");
+      dateReminderPage.classList.remove("hidden");
+      loadDates();
+    });
+
+    // Back to Menu function from Date Reminder
+    function backToMenu() {
+      dateReminderPage.classList.add("hidden");
+      menuPage.classList.remove("hidden");
+      clearDateForm();
+    }
+
+    // Save dates to localStorage
+    function saveDates(dates) {
+      localStorage.setItem("loveDates", JSON.stringify(dates));
+    }
+
+    // Load dates from localStorage and display
+    function loadDates() {
+      dateList.innerHTML = "";
+      const dates = JSON.parse(localStorage.getItem("loveDates")) || [];
+      if (dates.length === 0) {
+        dateList.innerHTML = `<li class="italic text-pink-400">No dates saved yet.</li>`;
+        return;
+      }
+
+      dates.forEach((item, index) => {
+        const dateObj = new Date(item.date);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        const formattedDate = dateObj.toLocaleDateString(undefined, options);
+
+        const li = document.createElement("li");
+        li.className = "flex justify-between items-center bg-pink-100 rounded-full px-4 py-2 shadow-md";
+
+        li.innerHTML = `
+          <span>${item.name} - ${formattedDate}</span>
+          <button class="text-red-500 font-bold px-3 py-1 rounded-full hover:bg-red-200" aria-label="Delete date">&times;</button>
+        `;
+
+        li.querySelector("button").onclick = () => {
+          dates.splice(index, 1);
+          saveDates(dates);
+          loadDates();
+        };
+
+        dateList.appendChild(li);
+      });
+    }
+
+    // Handle Date form submit
+    dateForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = dateNameInput.value.trim();
+      const date = dateValueInput.value;
+      if (!name || !date) return;
+
+      let dates = JSON.parse(localStorage.getItem("loveDates")) || [];
+      dates.push({name, date});
+      saveDates(dates);
+      loadDates();
+      clearDateForm();
+    });
+
+    // Clear Date form inputs
+    function clearDateForm() {
+      dateNameInput.value = "";
+      dateValueInput.value = "";
+    }
+
+    // Love Notes button click - menu -> love notes page
+    btnLoveNotes.addEventListener("click", function() {
+      menuPage.classList.add("hidden");
+      loveNotesPage.classList.remove("hidden");
+      loadNotes();
+    });
+
+    // Back to Menu from Love Notes page
+    function backToMenuFromNotes() {
+      loveNotesPage.classList.add("hidden");
+      menuPage.classList.remove("hidden");
+      clearNoteForm();
+    }
+
+    // Save notes to localStorage
+    function saveNotes(notes) {
+      localStorage.setItem("loveNotes", JSON.stringify(notes));
+    }
+
+    // Load notes from localStorage and display
+    function loadNotes() {
+      noteList.innerHTML = "";
+      const notes = JSON.parse(localStorage.getItem("loveNotes")) || [];
+      if (notes.length === 0) {
+        noteList.innerHTML = `<li class="italic text-pink-400">No notes yet.</li>`;
+        return;
+      }
+
+      notes.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.className = "bg-pink-100 rounded-xl p-4 shadow-md relative";
+
+        li.innerHTML = `
+          <p class="whitespace-pre-wrap mt-1">${item.content}</p>
+          <button aria-label="Delete note" class="absolute top-2 right-2 text-red-500 font-bold hover:bg-red-200 rounded-full px-2">×</button>
+        `;
+
+        li.querySelector("button").onclick = () => {
+          notes.splice(index, 1);
+          saveNotes(notes);
+          loadNotes();
+        };
+
+        noteList.appendChild(li);
+      });
+    }
+
+    // Handle Note form submit
+    noteForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const content = noteContentInput.value.trim();
+      if (!content) return;
+
+      let notes = JSON.parse(localStorage.getItem("loveNotes")) || [];
+      notes.push({content});
+      saveNotes(notes);
+      loadNotes();
+      clearNoteForm();
+    });
+
+    // Clear Note form inputs
+    function clearNoteForm() {
+      noteContentInput.value = "";
+    }
+  </script>
+</body>
+  </html>
